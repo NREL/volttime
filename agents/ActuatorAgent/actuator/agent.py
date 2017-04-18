@@ -1,4 +1,9 @@
+"""
 
+NREL modifed actuator to work with volttime
+
+
+"""
 __docformat__ = 'reStructuredText'
 
 import collections
