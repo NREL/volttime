@@ -1,6 +1,7 @@
 ACES-Volttime® 
 ====
 
+__This assumes you know how to build an dinstall volttron agents and a basic understanding of how the Volttron Driver Framework works__
 
 **Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time. 
 
@@ -55,7 +56,26 @@ Control agents need a few extra lines of code to enable them to sync with Voltti
         self.volttime = pytz.utc.localize(volttime)
 
 ```
+____________________________________________________________________
 
+##Volttime 
+
+
+###Agent setup
+
+The starttime, stoptime and the rate at whcih this time would be published 
+can be controlled by the setting.py file. The file to use for streaming timestamps on the bus can also be set in this file.
+
+```
+ITEMC_JSON = "itemc_house_0.json"
+VTIME_START = "2013-07-01 18:00:00"
+VTIME_STOP = "2013-07-02 18:00:00"
+HEARTBEAT_PERIOD = 1.0
+```
+Here's an example of what the Volttime message from this agent looks like: 
+```
+
+```
 
 
 
