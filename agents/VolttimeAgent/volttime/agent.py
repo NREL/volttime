@@ -37,7 +37,7 @@ class VolttimeAgent(Agent):
     def __init__(self, config_path, **kwargs):
         super(VolttimeAgent, self).__init__(**kwargs)
         self.config = utils.load_config(config_path)
-        self.path = os.path.join(os.environ['ITEMC_DATA_HOME'], os.environ['ITEMC_FR'])
+        self.path = settings.ITEMC_JSON
         itemc_handle = itemc.Itemc(data=self.path, working_dir=".")
         # publish every second
         self.df = itemc_handle.df.resample(rule='1S', fill_method='ffill').reset_index()
