@@ -1,6 +1,11 @@
 ACES-Volttime® 
 ====
 
+```
+Copyright (c) ...<>
+```
+
+
 __This assumes you know how to build an dinstall volttron agents and a basic understanding of how the Volttron Driver Framework works__
 
 **Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time. 
