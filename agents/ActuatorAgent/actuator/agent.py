@@ -372,7 +372,7 @@ class ActuatorAgent(Agent):
         volttime = time.strptime(str_time, "%Y-%m-%d %H:%M:%S")
         volttime = dt.fromtimestamp(mktime(volttime))
         self.volttime = pytz.utc.localize(volttime)
-        print "VOLTTIME at Actuator : ",self.volttime
+        # print "VOLTTIME at Actuator : ",self.volttime
 
 
 

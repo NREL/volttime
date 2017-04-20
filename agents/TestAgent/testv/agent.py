@@ -27,19 +27,19 @@ import pytz
 utils.setup_logging()
 _log = logging.getLogger(__name__)
 
-class SCHouseAgent(Agent):
+class TestAgent(Agent):
     '''
     Publishes example control signals to control the Thermostat Relay
     '''
     def __init__(self, config_path, **kwargs):
-        ''' SCHouseAgent initialization function'''
-        super(SCHouseAgent, self).__init__(**kwargs)
+        ''' TestAgent initialization function'''
+        super(TestAgent, self).__init__(**kwargs)
         self.config = utils.load_config(config_path)
         self.volttime = ""
 
     @Core.receiver('onsetup')
     def setup(self, sender, **kwargs):
-        '''SCHouse setup function'''
+        '''Test setup function'''
         # Demonstrate accessing a value from the config file
         _log.info(self.config['message'])
         self._agent_id = self.config['agentid']
@@ -56,7 +56,7 @@ class SCHouseAgent(Agent):
     def ending(self, sender, **kwargs):
         ''' at the end'''
         pass
-    
+
     @PubSub.subscribe('pubsub', 'datalogger/log/volttime')
     def match_all(self, peer, sender, bus, topic, headers, message):
         '''
@@ -95,20 +95,20 @@ class SCHouseAgent(Agent):
                         # "unit": "fake_device",
             self.tasks = self.tasks + 1
             print "tasks being scheduled : ",self.tasks
-            print self.vip.rpc.call('platform.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
-            print self.vip.rpc.call('platform.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
+            print self.vip.rpc.call('platform.actuator\n','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
+            print self.vip.rpc.call('platform.actuator\n','set_point','rpc_ctl',"fake/PowerState",12).get()
             print "Tasks being cancelled : ",self.tasks
 
-            print self.vip.rpc.call('platform.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
+            print self.vip.rpc.call('platform.actuator\n','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
             print "successfully cancelled task"
-            print self.vip.rpc.call('platform.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
+            print self.vip.rpc.call('platform.actuator\n','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
 
 
 
 def main(argv=sys.argv):
     '''Main method called by the eggsecutable.'''
     try:
-        utils.vip_main(SCHouseAgent)
+        utils.vip_main(TestAgent)
     except Exception as e:
         _log.exception('unhandled exception')
 

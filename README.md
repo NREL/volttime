@@ -1,5 +1,6 @@
-ACES-Volttime® 
+ACES-Volttime ®/™/© ??
 ====
+
 
 ```
 Copyright (c) ...<>
@@ -21,6 +22,7 @@ This repository has two sets of agents:
 the core agents which enable using Volttime and example agents which show you how to interatct with these agents. 
 ____________________________________________________________________
 
+
 ##Core Agents:
 
 ###Volttime Agent : 
@@ -38,10 +40,7 @@ ____________________________________________________________________
 
 ####Supervisory Controller agent: 
 This agent has examples of scheduling a device and setting values on it. This works based on the updated Volttime. 
- 
-###Radiothermostat relay agent: 
-This repo also conntains an example relay agent  to test the Volttime setup. 
-____________________________________________________________________
+
 
 ##Note:
 Control agents need a few extra lines of code to enable them to sync with Volttime. 
@@ -61,6 +60,13 @@ Control agents need a few extra lines of code to enable them to sync with Voltti
         self.volttime = pytz.utc.localize(volttime)
 
 ```
+##Building/Installling the agents: 
+ 
+This repo has a Makefile to help with the agent installation, you can use your own setup if you prefer: 
+
+Please set your `VOLTTRON_HOME` enviroment variable before you build/install. 
+`VOLTTRON_HOME` defaults to `$HOME/.volttron`
+
 ____________________________________________________________________
 
 ##Volttime 
@@ -78,9 +84,27 @@ VTIME_STOP = "2013-07-02 18:00:00"
 HEARTBEAT_PERIOD = 1.0
 ```
 Here's an example of what the Volttime message from this agent looks like: 
-```
 
 ```
+Text here
+```
+
+____________________________________________________________________
+
+##Example setup
+
+* Please make sure the Platfrom is up and running
+* `volttron -vv -l volttron.log&`
+* Start the Master driver agent configured with the fake decive. 
+* The Master driver can be found here : volttron/services/core/MasterDriverAgent
+* The configuration files for the Fake device can be found here : volttron/examples/configurations/drivers
+* Start the Modified Actuator Agent
+* Start the TestAgent
+* Start the Volttime agent
+* **Please keep in mind to start the Volttime agent after all the other agents have been started**
+* You can now tail the log file to see the progress
+* `tail -f volttron.log`
+
 
 
 
