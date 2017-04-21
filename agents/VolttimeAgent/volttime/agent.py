@@ -31,8 +31,9 @@ utils.setup_logging()
 _log = logging.getLogger(__name__)
 
 class VolttimeAgent(Agent):
-    '''Listens to everything and publishes a heartbeat according to the
-    heartbeat period specified in the settings module.
+    '''
+    Volttime - publishes timestamp to sync the simulation
+
     '''
 
     def __init__(self, config_path, **kwargs):
