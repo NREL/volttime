@@ -18,9 +18,10 @@ import time
 from . import settings
 
 import random
-import itemc
 
-import simpy
+import pandas as pd
+
+
 from datetime import timedelta
 from functools import partial
 
@@ -37,20 +38,17 @@ class VolttimeAgent(Agent):
     def __init__(self, config_path, **kwargs):
         super(VolttimeAgent, self).__init__(**kwargs)
         self.config = utils.load_config(config_path)
-        self.path = settings.ITEMC_JSON
-        itemc_handle = itemc.Itemc(data=self.path, working_dir=".")
-        # publish every second
-        self.df = itemc_handle.df.resample(rule='1S', fill_method='ffill').reset_index()
-        self.vtime_start = time.strptime(settings.VTIME_START, "%Y-%m-%d %H:%M:%S")
-        self.vtime_stop = time.strptime(settings.VTIME_STOP, "%Y-%m-%d %H:%M:%S")
         self.index = 0
+        self.json_time = {'timeseries' : []}
+        self.starttime = settings.VTIME_START
+        self.endtime = settings.VTIME_STOP
+        et = pd.to_datetime(self.endtime)
+        st = pd.to_datetime(self.starttime)
+        self.json_time['timeseries'].append(st)
+        while st< et:
+            st  =  st + timedelta(0,1)
+            self.json_time['timeseries'].append(st)
 
-        current_data = self.df.ix[self.index]
-        timestamp=time.strptime(str(current_data['index']),"%Y-%m-%d %H:%M:%S")
-        while(timestamp < self.vtime_start):
-            self.index += 1
-            current_data = self.df.ix[self.index]
-            timestamp=time.strptime(str(current_data['index']),"%Y-%m-%d %H:%M:%S")
 
 
     @Core.receiver('onsetup')
@@ -60,25 +58,17 @@ class VolttimeAgent(Agent):
 
     @Core.periodic(settings.HEARTBEAT_PERIOD)
     def publish_heartbeat(self):
-        if self.index <= len(self.df):
+        if self.index <= len(self.json_time['timeseries']):
             try:
-                current_data = self.df.ix[self.index]
-                timestamp=time.strptime(str(current_data['index']),"%Y-%m-%d %H:%M:%S")
+                headers = {
+                    'AgentID': self._agent_id,
+                    headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
+                    headers_mod.DATE: utils.get_aware_utc_now().isoformat(' ') + 'Z',
+                }
 
-                # should start right away bc self.index ---> vtime_start
-                if(timestamp>=self.vtime_start and  timestamp<=self.vtime_stop):
-                    # Every 1 second...
-                    if ((timestamp.tm_sec)%1 == 0 and (timestamp.tm_min)%1 == 0):
-
-                        headers = {
-                            'AgentID': self._agent_id,
-                            headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
-                            headers_mod.DATE: utils.get_aware_utc_now().isoformat(' ') + 'Z',
-                        }
-
-                        value = {}
-                        value['timestamp'] = {'Readings': str(current_data['index']),'Units':'ts'}
-                        self.vip.pubsub.publish('pubsub', 'datalogger/log/volttime', headers, value)
+                value = {}
+                value['timestamp'] = {'Readings': str(self.json_time['timeseries'][self.index]),'Units':'ts'}
+                self.vip.pubsub.publish('pubsub', 'datalogger/log/volttime', headers, value)
 
 
                 self.index += 1
