@@ -19,7 +19,7 @@ the core agents which enable using Volttime and an example agents which shows ho
 ____________________________________________________________________
 
 
-##Core Agents:
+## Core Agents:
 
 ### Volttime Agent : 
 This agent can be configured to publish time at different graularities and different rates. 
@@ -37,7 +37,7 @@ ____________________________________________________________________
 This agent has examples of scheduling a device and setting values on it. This works based on the updated Volttime. 
 
 
-##Note:
+## Note:
 Test agent needs a few extra lines of code to enable them to sync with Volttime. 
 
 
@@ -55,13 +55,13 @@ Test agent needs a few extra lines of code to enable them to sync with Volttime.
         self.volttime = pytz.utc.localize(volttime)
 
 ```
-##Building/Installling the agents: 
+## Building/Installling the agents: 
  
 This repo has a Makefile to help with the agent installation, you can use your own setup if you prefer: 
 
 Please set your `VOLTTRON_HOME` enviroment variable before using this Makefile.
 ____________________________________________________________________
-##Volttime 
+## Volttime 
 
 
 ### Agent setup
@@ -87,7 +87,7 @@ Message: {'timestamp': {'Units': 'ts', 'Readings': '2013-07-01 18:02:56'}}
 
 ____________________________________________________________________
 
-##Example setup
+## Example setup
 
 * Please make sure the Platfrom is up and running
 * `volttron -vv -l volttron.log&`
