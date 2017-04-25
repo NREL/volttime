@@ -236,15 +236,18 @@ class ActuatorAgent(Agent):
 
     def _setup_schedule(self, preempt_grace_time, initial_state=None):
 
-        now = self.volttime
+	try:
+        	now = self.volttime
 
-        self._schedule_manager = ScheduleManager(
-            preempt_grace_time,
-            now=now,
-            save_state_callback=self._schedule_save_callback,
-            initial_state_string=initial_state)
+        	self._schedule_manager = ScheduleManager(
+            	preempt_grace_time,
+            	now=now,
+            	save_state_callback=self._schedule_save_callback,
+            	initial_state_string=initial_state)
 
-        self._update_device_state_and_schedule(now)
+        	self._update_device_state_and_schedule(now)
+	except: 
+		print "We don't have volttime yet, will setup the scheduler after we subscribe to volttime."	
 
     def _update_device_state_and_schedule(self, now):
         _log.debug("_update_device_state_and_schedule")
