@@ -95,13 +95,13 @@ class TestAgent(Agent):
                         # "unit": "fake_device",
             self.tasks = self.tasks + 1
             print "tasks being scheduled : ",self.tasks
-            print self.vip.rpc.call('platform.actuator\n','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
-            print self.vip.rpc.call('platform.actuator\n','set_point','rpc_ctl',"fake/PowerState",12).get()
+            print self.vip.rpc.call('platform.d.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
+            print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
             print "Tasks being cancelled : ",self.tasks
 
-            print self.vip.rpc.call('platform.actuator\n','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
+            print self.vip.rpc.call('platform.d.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
             print "successfully cancelled task"
-            print self.vip.rpc.call('platform.actuator\n','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
+            print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
 
 
 
