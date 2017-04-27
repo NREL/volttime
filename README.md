@@ -9,9 +9,12 @@ Copyright (c) ...<>
 
 __This example setup assumes you know how to build and install volttron agents and have a basic understanding of the Volttron Driver Framework__
 
+
 **Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time. 
 
-
+**Requirements**
+Volttron Platfrom compatible with the driver framewrok
+pandas; you can get it by sourceing the volttron environment and `pip install pandas`
 
 ____________________________________________________________________
 This repository has two sets of agents: 
@@ -22,26 +25,29 @@ ____________________________________________________________________
 ## Core Agents:
 
 ### Volttime Agent : 
-This agent can be configured to publish time at different graularities and different rates. 
+This agent can be configured to publish time at different rates. 
 
 
 ### Actuator Agent: 
 This agent is a modified version of the Actuator available in Volttron. This agent uses Volttime as the main time server. 
 This agent enables using Volttime in the Vollttron driver framewrok. 
+The VIP IDENTITY of this agent is `platform.d.actuator`
 ____________________________________________________________________
 
 ## Example Agent:
 
 
 #### Test agent: 
-This agent has examples of scheduling a device and setting values on it. This works based on the updated Volttime. 
+This agent has examples of scheduling the fake debvice provided with Volttron and setting a value on it. This works based on the updated Volttime. 
 
 
 ## Note:
-Test agent needs a few extra lines of code to enable them to sync with Volttime. 
+Test agent needs a few extra lines of code to enable it to sync with Volttime. 
 
 
 ### Subscribing to Volttime
+Volttime will be used as the timeserver for the agents that would like to run in the simulated time. 
+
 ```
     @PubSub.subscribe('pubsub', 'datalogger/log/volttime')
     def match_all(self, peer, sender, bus, topic, headers, message):
@@ -55,11 +61,20 @@ Test agent needs a few extra lines of code to enable them to sync with Volttime.
         self.volttime = pytz.utc.localize(volttime)
 
 ```
+
 ## Building/Installling the agents: 
  
 This repo has a Makefile to help with the agent installation, you can use your own setup if you prefer: 
 
 Please set your `VOLTTRON_HOME` enviroment variable before using this Makefile.
+Make sure the platform is up and running before you `make` the agents. 
+
+```
+volttron -l log&  
+make all
+
+```
+
 ____________________________________________________________________
 ## Volttime 
 
@@ -70,9 +85,9 @@ The starttime, stoptime and the rate at which this time would be published
 can be controlled by the settings.py file. 
 
 ```
-VTIME_START = "2013-07-01 18:00:00"
-VTIME_STOP = "2013-07-02 18:00:00"
-HEARTBEAT_PERIOD = 1.0
+VTIME_START = "2013-07-01 18:00:00" #Simulation start time
+VTIME_STOP = "2013-07-02 18:00:00" # simulation stop time
+HEARTBEAT_PERIOD = 1.0 # Simulation rate
 
 ```
 Here's an example of what the Volttime message from this agent looks like: 
