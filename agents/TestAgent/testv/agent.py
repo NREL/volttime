@@ -66,6 +66,18 @@ class TestAgent(Agent):
         str_time = message['timestamp']['Readings']
         timestamp = time.strptime(str_time, "%Y-%m-%d %H:%M:%S")
         self.volttime = message['timestamp']['Readings']
+        value_db = self.vip.rpc.call('platform.d.actuator','get_point',"fake/PowerState").get()
+        headers = {
+            'AgentID': self._agent_id,
+            headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
+            headers_mod.DATE: datetime.now().isoformat(' ') + 'Z',
+        }
+        # publish cooling_setpoint from itemc
+        value = {'PowerState':  { 'Readings': value_db, 'Units': 'KW' },
+                 'timestamp': { 'Readings': message['timestamp']['Readings'],
+                                   'Units': 'ts'}}
+        self.vip.pubsub.publish('pubsub', 'datalogger/log/fake/State', headers, value)
+
         if (timestamp.tm_sec % 20) == 0 and (timestamp.tm_min % 1) == 0:
             headers = {
                 'AgentID': self._agent_id,
@@ -96,13 +108,150 @@ class TestAgent(Agent):
             self.tasks = self.tasks + 1
             print "tasks being scheduled : ",self.tasks
             print self.vip.rpc.call('platform.d.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
-            print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
+            #
+            # print "Tasks being cancelled : ",self.tasks
+            #
+            # print self.vip.rpc.call('platform.d.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
+            # print "successfully cancelled task"
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
+            value = {'Lock':  { 'Readings': 1, 'Units': 'KW' },
+                     'timestamp': { 'Readings': message['timestamp']['Readings'],
+                                       'Units': 'ts'}}
+            self.vip.pubsub.publish('pubsub', 'datalogger/log/Controller/Lock', headers, value)
+
+        if (timestamp.tm_sec % 21) == 0 and (timestamp.tm_min % 1) == 0:
+            headers = {
+                'AgentID': self._agent_id,
+                headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
+                headers_mod.DATE: datetime.now().isoformat(' ') + 'Z',
+            }
+            query = {}
+            name = ""
+            msg = {}
+            start_time = self.volttime
+            timestamp=time.strptime(start_time,"%Y-%m-%d %H:%M:%S")
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.mktime(timestamp) + 10))
+            st= time.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+            st = dt.fromtimestamp(mktime(st))
+            start_time = str(pytz.utc.localize(st))
+            et= time.strptime(end_time, "%Y-%m-%d %H:%M:%S")
+            et = dt.fromtimestamp(mktime(et))
+            end_time = str(pytz.utc.localize(et))
+            msgs = [
+                        ["fake", #First time slot.
+                         start_time,     #Start of time slot.
+                         end_time]   #End of time slot.
+                    ]
+
+                    #     "campus": "campus",
+                        # "building": "building",
+                        # "unit": "fake_device",
+            # self.tasks = self.tasks + 1
+            # print "tasks being scheduled : ",self.tasks
+            # print self.vip.rpc.call('platform.d.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
+            temps = random.randint(1,100)
+            print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",temps).get()
+
+            # print "Tasks being cancelled : ",self.tasks
+            #
+            # print self.vip.rpc.call('platform.d.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
+            # print "successfully cancelled task"
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
+            value = {'PowerState':  { 'Readings': temps, 'Units': 'KW' },
+                     'timestamp': { 'Readings': message['timestamp']['Readings'],
+                                       'Units': 'ts'}}
+            self.vip.pubsub.publish('pubsub', 'datalogger/log/fake/Set', headers, value)
+
+
+        if (timestamp.tm_sec % 22) == 0 and (timestamp.tm_min % 1) == 0:
+            headers = {
+                'AgentID': self._agent_id,
+                headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
+                headers_mod.DATE: datetime.now().isoformat(' ') + 'Z',
+            }
+            query = {}
+            name = ""
+            msg = {}
+            start_time = self.volttime
+            timestamp=time.strptime(start_time,"%Y-%m-%d %H:%M:%S")
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.mktime(timestamp) + 10))
+            st= time.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+            st = dt.fromtimestamp(mktime(st))
+            start_time = str(pytz.utc.localize(st))
+            et= time.strptime(end_time, "%Y-%m-%d %H:%M:%S")
+            et = dt.fromtimestamp(mktime(et))
+            end_time = str(pytz.utc.localize(et))
+            msgs = [
+                        ["fake", #First time slot.
+                         start_time,     #Start of time slot.
+                         end_time]   #End of time slot.
+                    ]
+
+                    #     "campus": "campus",
+                        # "building": "building",
+                        # "unit": "fake_device",
+            # self.tasks = self.tasks + 1
+            # print "tasks being scheduled : ",self.tasks
+            # print self.vip.rpc.call('platform.d.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
+
             print "Tasks being cancelled : ",self.tasks
 
             print self.vip.rpc.call('platform.d.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
             print "successfully cancelled task"
-            print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
+            value = {'Lock':  { 'Readings': 0, 'Units': 'KW' },
+                     'timestamp': { 'Readings': message['timestamp']['Readings'],
+                                       'Units': 'ts'}}
+            self.vip.pubsub.publish('pubsub', 'datalogger/log/Controller/Lock', headers, value)
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",13).get()
 
+        if (timestamp.tm_sec % 23) == 0 and (timestamp.tm_min % 1) == 0:
+            headers = {
+                'AgentID': self._agent_id,
+                headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.PLAIN_TEXT,
+                headers_mod.DATE: datetime.now().isoformat(' ') + 'Z',
+            }
+            query = {}
+            name = ""
+            msg = {}
+            start_time = self.volttime
+            timestamp=time.strptime(start_time,"%Y-%m-%d %H:%M:%S")
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.mktime(timestamp) + 10))
+            st= time.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+            st = dt.fromtimestamp(mktime(st))
+            start_time = str(pytz.utc.localize(st))
+            et= time.strptime(end_time, "%Y-%m-%d %H:%M:%S")
+            et = dt.fromtimestamp(mktime(et))
+            end_time = str(pytz.utc.localize(et))
+            msgs = [
+                        ["fake", #First time slot.
+                         start_time,     #Start of time slot.
+                         end_time]   #End of time slot.
+                    ]
+
+                    #     "campus": "campus",
+                        # "building": "building",
+                        # "unit": "fake_device",
+            # self.tasks = self.tasks + 1
+            # print "tasks being scheduled : ",self.tasks
+            # print self.vip.rpc.call('platform.d.actuator','request_new_schedule','rpc_ctl',str(self.tasks),'LOW',msgs).get()
+            # print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fake/PowerState",12).get()
+            #
+            # print "Tasks being cancelled : ",self.tasks
+            #
+            # print self.vip.rpc.call('platform.d.actuator','request_cancel_schedule','rpc_ctl',str(self.tasks)).get()
+            # print "successfully cancelled task"
+            temps = random.randint(1,100)
+            try:
+                print self.vip.rpc.call('platform.d.actuator','set_point','rpc_ctl',"fakedriver/fake/PowerState",temps).get()
+            except :
+                print "Can't set point, You don't have this lock"
+                
+            value = {'PowerState':  { 'Readings': temps, 'Units': 'KW' },
+                     'timestamp': { 'Readings': message['timestamp']['Readings'],
+                                       'Units': 'ts'}}
+            self.vip.pubsub.publish('pubsub', 'datalogger/log/fake/Set', headers, value)
 
 
 def main(argv=sys.argv):
