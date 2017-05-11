@@ -1,9 +1,26 @@
-ACES-Volttime ®/™/© ??
+ACES-Volttime
 ====
 
 
 ```
-Copyright (c) ...<>
+Copyright (c) 2017, Alliance for Sustainable Energy, LLC
+All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided
+that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice, this list of conditions
+and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or
+promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 ```
 
 
@@ -12,43 +29,44 @@ __This example setup assumes you know how to build and install volttron agents a
 **VOLTTRON Installation**
 Please follow the steps at [http://volttron.readthedocs.io/en/master/install.html](http://volttron.readthedocs.io/en/master/install.html)
 
-**Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time. 
+**Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time.
 
 **Requirements**
-Volttron Platform compatible with the driver framework
-pandas; you can get it by sourcing the volttron environment and `pip install pandas`
+
+* Volttron Platform compatible with the driver framework
+* pandas; you can get it by sourcing the volttron environment and `pip install pandas`
 
 ____________________________________________________________________
-This repository has two sets of agents: 
-the core agents which enable using Volttime and an example agents which shows how to interact with these agents. 
+This repository has two sets of agents:
+the core agents which enable using Volttime and an example agents which shows how to interact with these agents.
 ____________________________________________________________________
 
 
 ## Core Agents:
 
-### Volttime Agent : 
-This agent can be configured to publish Volttime at different rates. 
+### Volttime Agent :
+This agent can be configured to publish Volttime at different rates.
 
 
-### Actuator Agent: 
-This agent is a modified version of the ActuatorAgent available in Volttron. This agent uses Volttime as the main time server. 
-This agent enables using Volttime in the VOLTTRON driver framework. 
+### Actuator Agent:
+This agent is a modified version of the ActuatorAgent available in Volttron. This agent uses Volttime as the main time server.
+This agent enables using Volttime in the VOLTTRON driver framework.
 The VIP IDENTITY of this agent is `platform.d.actuator`
 ____________________________________________________________________
 
 ## Example Agent:
 
 
-#### Test agent: 
-This agent has examples of scheduling the fake device provided with VOLTTRON and setting a value on it. This works based on the updated Volttime. 
+#### Test agent:
+This agent has examples of scheduling the fake device provided with VOLTTRON and setting a value on it. This works based on the updated Volttime.
 
 
 ## Note:
-Test agent needs a few extra lines of code to enable it to sync with Volttime. 
+Test agent needs a few extra lines of code to enable it to sync with Volttime.
 
 
 ### Subscribing to Volttime
-Volttime will be used as the timeserver for the agents that would like to run in the simulated time. 
+Volttime will be used as the timeserver for the agents that would like to run in the simulated time.
 
 ```
     @PubSub.subscribe('pubsub', 'datalogger/log/volttime')
@@ -64,19 +82,19 @@ Volttime will be used as the timeserver for the agents that would like to run in
 
 ```
 
-## Building/Installing the agents: 
- 
-This repo has a Makefile to help with the agent installation, you can use your own setup if you prefer: 
+## Building/Installing the agents:
+
+This repo has a Makefile to help with the agent installation, you can use your own setup if you prefer:
 
 Please set your `VOLTTRON_HOME` environment variable before using this Makefile.
-Make sure the platform is up and running before you `make` the agents. 
+Make sure the platform is up and running before you `make` the agents.
 
 ```
 volttron-ctl log&  
 make all
 
 # add the configuration store for the modified actuator agent
-volttron-ctl config store platform.d.actuator schedule_state_file platform.d.actuator 
+volttron-ctl config store platform.d.actuator schedule_state_file platform.d.actuator
 
 ```
 
@@ -86,13 +104,13 @@ Build the master driver agent configured with the fake device;
 * The configuration files for the Fake device can be found here : volttron/examples/configurations/drivers in the main VOLTTRON repo
 
 ____________________________________________________________________
-## Volttime 
+## Volttime
 
 
 ### Agent setup
 
-The start-time, stop-time and the rate at which this time would be published 
-can be controlled by the settings.py file. 
+The start-time, stop-time and the rate at which this time would be published
+can be controlled by the settings.py file.
 
 ```
 VTIME_START = "2013-07-01 18:00:00" #Simulation start time
@@ -100,7 +118,7 @@ VTIME_STOP = "2013-07-02 18:00:00" # simulation stop time
 HEARTBEAT_PERIOD = 1.0 # Simulation rate
 
 ```
-Here's an example of what the Volttime message from this agent looks like: 
+Here's an example of what the Volttime message from this agent looks like:
 
 ```
 Peer: 'pubsub', Sender: 'volttimeagent-3.0_2':, Bus: u'', Topic: 'datalogger/log/volttime',\
@@ -116,7 +134,7 @@ ____________________________________________________________________
 
 * Please make sure the Platform is up and running
 * `volttron -vv -l volttron.log&`
-* Start the Master driver agent configured with the fake device. 
+* Start the Master driver agent configured with the fake device.
 
 * Start the Modified Actuator Agent `volttron-ctl start --tag actuator-v`
 * Start the TestAgent  `volttron-ctl start --tag test-v`
@@ -129,4 +147,4 @@ ____________________________________________________________________
 ____________________________________________________________________
 
 
- 
+
