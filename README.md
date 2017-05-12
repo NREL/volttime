@@ -128,4 +128,5 @@ ____________________________________________________________________
 ____________________________________________________________________
 
 
-
+**Feedback**
+We apprecitate your feedback, Please use the GitHub issue tracker at https://github.com/NREL/volttime/issues
