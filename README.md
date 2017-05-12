@@ -130,3 +130,12 @@ ____________________________________________________________________
 
 **Feedback**
 We apprecitate your feedback, Please use the GitHub issue tracker at https://github.com/NREL/volttime/issues
+
+____________________________________________________________________
+
+
+
+## License
+The project is [licensed](https://github.com/NREL/volttime/blob/master/TERMS.md) under a modified BSD license.
+
+
