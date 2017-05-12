@@ -1,4 +1,9 @@
+"""
 
+NREL modifed actuator to work with volttime
+
+
+"""
 __docformat__ = 'reStructuredText'
 
 import collections
@@ -119,7 +124,8 @@ class ActuatorAgent(Agent):
         self._update_event = None
         self._device_states = {}
 
-        self.schedule_state_file = "_schedule_state"
+        #self.schedule_state_file = "_schedule_state"
+        self.schedule_state_file = "schedule_state_file"
         self.heartbeat_greenlet = None
         self.heartbeat_interval = heartbeat_interval
         self._schedule_manager = None
@@ -129,7 +135,8 @@ class ActuatorAgent(Agent):
         self.default_config = {"heartbeat_interval": heartbeat_interval,
                               "schedule_publish_interval": schedule_publish_interval,
                               "preempt_grace_time": preempt_grace_time,
-                              "driver_vip_identity": driver_vip_identity}
+                              "driver_vip_identity": driver_vip_identity,
+			      "schedule_state_file": "actuator_state.pickle"	}
 
 
         self.vip.config.set_default("config", self.default_config)
@@ -231,15 +238,18 @@ class ActuatorAgent(Agent):
 
     def _setup_schedule(self, preempt_grace_time, initial_state=None):
 
-        now = self.volttime
+	try:
+        	now = self.volttime
 
-        self._schedule_manager = ScheduleManager(
-            preempt_grace_time,
-            now=now,
-            save_state_callback=self._schedule_save_callback,
-            initial_state_string=initial_state)
+        	self._schedule_manager = ScheduleManager(
+            	preempt_grace_time,
+            	now=now,
+            	save_state_callback=self._schedule_save_callback,
+            	initial_state_string=initial_state)
 
-        self._update_device_state_and_schedule(now)
+        	self._update_device_state_and_schedule(now)
+	except: 
+		print "We don't have volttime yet, will setup the scheduler after we subscribe to volttime."	
 
     def _update_device_state_and_schedule(self, now):
         _log.debug("_update_device_state_and_schedule")
@@ -846,11 +856,24 @@ class ActuatorAgent(Agent):
 
         if self._schedule_manager is None:
 
-            config = self.default_config.copy()
+            #config = self.default_config.copy()
             # config.update(contents)
-            state_string = self.vip.config.get(self.schedule_state_file)
-            preempt_grace_time = float(config["preempt_grace_time"])
-            self._setup_schedule(preempt_grace_time, state_string)
+            #state_string = self.vip.config.get(self.schedule_state_file)
+            #preempt_grace_time = float(config["preempt_grace_time"])
+            #self._setup_schedule(preempt_grace_time, state_string)
+
+
+            try:
+                config = self.default_config.copy()
+                # config.update(contents)
+                state_string = self.vip.config.get(self.schedule_state_file)
+                preempt_grace_time = float(config["preempt_grace_time"])
+                self._setup_schedule(preempt_grace_time, state_string)
+            except KeyError as e:
+                state_string = None
+		print "ERROR :::: ",e
+		print "This is STILL being NONE"
+
 
             if not self.subscriptions_setup and self._schedule_manager is not None:
                 #Do this after the scheduler is setup.
@@ -989,7 +1012,7 @@ class ActuatorAgent(Agent):
 
 def main():
     """Main method called to start the agent."""
-    utils.vip_main(actuator_agent, identity='platform.actuator')
+    utils.vip_main(actuator_agent, identity='platform.d.actuator')
 
 
 if __name__ == '__main__':
