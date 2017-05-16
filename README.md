@@ -3,6 +3,7 @@ ACES-Volttime
 
 
 
+**Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time.
 
 
 __This example setup assumes you know how to build and install volttron agents and have a basic understanding of the Volttron Driver Framework__
@@ -10,7 +11,7 @@ __This example setup assumes you know how to build and install volttron agents a
 **VOLTTRON Installation**
 Please follow the steps at [http://volttron.readthedocs.io/en/master/install.html](http://volttron.readthedocs.io/en/master/install.html)
 
-**Volttime** enables running a VOLTTRON experiment/simulation at a specific but arbitrary date, hour, minute, second and at faster or slower than actual time.
+
 
 **Requirements**
 
