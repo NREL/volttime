@@ -1,6 +1,8 @@
 
-Copyright (c) 2017, Alliance for Sustainable Energy, LLC
-All rights reserved.
+Copyright © 2017 the Alliance for Sustainable Energy, LLC, All Rights Reserved
+ 
+This computer software was produced by Alliance for Sustainable Energy, LLC under contract with the U.S. Department of Energy. NEITHER ALLIANCE FOR SUSTAINABLE ENERGY, LLC, THE UNITED STATES NOR THE UNITED STATES DEPARTMENT OF ENERGY, NOR ANY OF THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY DATA, APPARATUS, PRODUCT, OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.
+ 
 
 
 Copyright (c) 2016, Battelle Memorial Institute
